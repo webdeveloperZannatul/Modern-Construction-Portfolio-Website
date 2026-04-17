@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Modern Construction Portfolio Website | Harsha Constructions</title>
+<meta name="description" content="Harsha Constructions - A premier construction firm based in Chennai, Tamil Nadu, India. Building iconic residential, commercial, and industrial projects with quality and innovation.">
+<meta name="keywords" content="Harsha Constructions, Construction Chennai, Builders Tamil Nadu, Residential Construction, Commercial Builders">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #0a2540;
+    --accent: #c9a96e;
+    --light: #f7f5f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(rgba(10,37,64,0.25), rgba(10,37,64,0.15)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+  }
+  .nav-scrolled {
+    background: rgba(255,255,255,0.98) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+  .nav-scrolled a, .nav-scrolled .logo-text { color: var(--primary) !important; }
+  .nav-scrolled .logo-accent { color: var(--accent) !important; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 13px;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #b89559; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(201,169,110,0.4);}
+  .btn-outline {
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 13px;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-outline:hover { background: #fff; color: var(--primary); }
+
+  .section-label {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .project-card img { transition: transform 0.8s ease; }
+  .project-card:hover img { transform: scale(1.08); }
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,37,64,0.95) 0%, rgba(10,37,64,0.3) 60%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 30px;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .project-card:hover .project-overlay { opacity: 1; }
+
+  .filter-btn.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  .filter-btn {
+    padding: 10px 24px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    background: #fff;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .filter-btn:hover { border-color: var(--primary); }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .service-card {
+    padding: 40px 30px;
+    background: #fff;
+    border: 1px solid #eee;
+    transition: all 0.4s;
+    text-align: center;
+  }
+  .service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border-color: var(--accent);
+  }
+  .service-icon {
+    width: 70px; height: 70px;
+    margin: 0 auto 24px;
+    background: var(--light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 28px;
+    transition: all 0.3s;
+  }
+  .service-card:hover .service-icon { background: var(--accent); color: #fff; }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal.active { display: flex; }
+  .modal-content {
+    background: #fff;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 4px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 15px; right: 15px;
+    width: 40px; height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-menu { display: none; }
+  .mobile-menu.active { display: flex; }
+
+  input, textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 15px;
+    transition: border 0.3s;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .testimonial-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+  .hero-content > * { animation: fadeInUp 1s ease forwards; opacity: 0;}
+  .hero-content > *:nth-child(1){ animation-delay: 0.2s;}
+  .hero-content > *:nth-child(2){ animation-delay: 0.4s;}
+  .hero-content > *:nth-child(3){ animation-delay: 0.6s;}
+  .hero-content > *:nth-child(4){ animation-delay: 0.8s;}
+
+  @media (max-width: 768px){
+    .stat-number { font-size: 40px; }
+    .hero h1 { font-size: 40px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <a href="#home" class="flex items-center gap-2">
+      <div class="w-10 h-10 bg-[#c9a96e] flex items-center justify-center rounded-sm">
+        <span class="text-white font-bold text-xl" style="font-family:'Playfair Display',serif;">H</span>
+      </div>
+      <div>
+        <div class="logo-text text-white font-bold text-lg leading-tight" style="font-family:'Playfair Display',serif;">HARSHA</div>
+        <div class="logo-accent text-[#c9a96e] text-[10px] tracking-[3px] font-semibold">CONSTRUCTIONS</div>
+      </div>
+    </a>
+    <ul class="hidden md:flex gap-8 items-center">
+      <li><a href="#home" class="text-white text-sm font-medium hover:text-[#c9a96e] transition">Home</a></li>
+      <li><a href="#about" class="text-white text-sm font-medium hover:text-[#c9a96e] transition">About</a></li>
+      <li><a href="#services" class="text-white text-sm font-medium hover:text-[#c9a96e] transition">Services</a></li>
+      <li><a href="#projects" class="text-white text-sm font-medium hover:text-[#c9a96e] transition">Projects</a></li>
+      <li><a href="#contact" class="text-white text-sm font-medium hover:text-[#c9a96e] transition">Contact</a></li>
+      <li><a href="#contact" class="btn-primary">Get Quote</a></li>
+    </ul>
+    <button id="menuBtn" class="md:hidden text-white text-2xl"><i class="fas fa-bars"></i></button>
+  </div>
+  <div id="mobileMenu" class="mobile-menu md:hidden flex-col mt-4 bg-white rounded p-4 shadow-lg">
+    <a href="#home" class="py-2 text-gray-800">Home</a>
+    <a href="#about" class="py-2 text-gray-800">About</a>
+    <a href="#services" class="py-2 text-gray-800">Services</a>
+    <a href="#projects" class="py-2 text-gray-800">Projects</a>
+    <a href="#contact" class="py-2 text-gray-800">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 w-full hero-content">
+    <span class="section-label text-[#c9a96e] bg-white/20 backdrop-blur-sm px-4 py-2 rounded-sm">Building Excellence Since 2005</span>
+    <h1 class="text-white text-5xl md:text-7xl font-bold mt-6 leading-tight" style="text-shadow: 0 2px 20px rgba(0,0,0,0.3);">
+      Crafting Timeless <br/><span class="text-[#c9a96e]">Architectural</span> Marvels
+    </h1>
+    <p class="text-white text-lg md:text-xl mt-6 max-w-2xl font-light" style="text-shadow: 0 1px 10px rgba(0,0,0,0.3);">
+      Harsha Constructions brings visionary designs to life across Chennai. We blend craftsmanship, innovation, and integrity to create spaces that inspire.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Contact Us</a>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white animate-bounce hidden md:block">
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<!-- <section id="about" class="py-24 px-6 md:px-12 bg-white">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <div class="fade-in">
+      <div class="relative">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80" class="w-full rounded-sm shadow-2xl" alt="About Harsha Constructions">
+        <div class="absolute -bottom-8 -right-8 bg-[#c9a96e] text-white p-8 rounded-sm shadow-xl hidden md:block">
+          <div class="text-5xl font-bold" style="font-family:'Playfair Display',serif;">19+</div>
+          <div class="text-sm uppercase tracking-wider mt-1">Years Experience</div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <span class="section-label">About Harsha Constructions</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-[#0a2540] mt-3 leading-tight">Where Vision Meets <span class="text-[#c9a96e]">Craftsmanship</span></h2>
+      <p class="text-gray-600 mt-6 leading-relaxed">
+        Founded in 2005 in Chennai, Harsha Constructions has established itself as one of Tamil Nadu's most trusted construction firms. From luxury residences to commercial complexes and industrial builds, our portfolio reflects a deep commitment to quality, durability, and aesthetic excellence.
+      </p>
+      <p class="text-gray-600 mt-4 leading-relaxed">
+        Our team of qualified architects, engineers, and craftsmen work with precision to deliver projects on time and within budget — without compromising on design integrity.
+      </p>
+      <div class="grid grid-cols-2 gap-6 mt-8">
+        <div class="flex items-start gap-3">
+          <i class="fas fa-check-circle text-[#c9a96e] text-xl mt-1"></i>
+          <div>
+            <h4 class="font-semibold text-[#0a2540]">ISO 9001:2015 Certified</h4>
+            <p class="text-sm text-gray-500">Quality Management</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <i class="fas fa-check-circle text-[#c9a96e] text-xl mt-1"></i>
+          <div>
+            <h4 class="font-semibold text-[#0a2540]">CREDAI Member</h4>
+            <p class="text-sm text-gray-500">Real Estate Association</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <i class="fas fa-check-circle text-[#c9a96e] text-xl mt-1"></i>
+          <div>
+            <h4 class="font-semibold text-[#0a2540]">IGBC Accredited</h4>
+            <p class="text-sm text-gray-500">Green Building</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <i class="fas fa-check-circle text-[#c9a96e] text-xl mt-1"></i>
+          <div>
+            <h4 class="font-semibold text-[#0a2540]">Licensed Contractor</h4>
+            <p class="text-sm text-gray-500">Class-A Registered</p>
+          </div>
+        </div>
+      </div>
+      <a href="#contact" class="btn-primary mt-8">Learn More</a>
+    </div>
+  </div>
+</section> -->
+<section id="about" class="py-24 bg-warm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Image Grid -->
+                <div class="relative">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="image-zoom rounded-2xl overflow-hidden shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Construction Site" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="image-zoom rounded-2xl overflow-hidden shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Building Interior" class="w-full h-64 object-cover">
+                            </div>
+                        </div>
+                        <div class="space-y-4 pt-8">
+                            <div class="image-zoom rounded-2xl overflow-hidden shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Modern Building" class="w-full h-64 object-cover">
+                            </div>
+                            <div class="image-zoom rounded-2xl overflow-hidden shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Architecture" class="w-full h-48 object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Badge -->
+                    <div class="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-2xl p-6 text-center">
+                        <h3 class="text-5xl font-bold gradient-text">25+</h3>
+                        <p class="text-gray-600 font-medium">Years of<br>Excellence</p>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div>
+                    <p class="text-secondary font-semibold tracking-wider mb-4">ABOUT US</p>
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-primary mb-6" style="color: rgb(201 169 110);">
+                        Crafting Chennai's Skyline Since 1998
+                    </h2>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Harsha Constructions has been at the forefront of Tamil Nadu's construction industry for over two decades. 
+                        Founded with a vision to blend traditional craftsmanship with modern innovation, we have successfully 
+                        delivered over 250 projects ranging from luxury residences to iconic commercial spaces.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Our commitment to quality, safety, and sustainability has earned us the trust of clients across South India. 
+                        We take pride in our team of experienced architects, engineers, and craftsmen who bring expertise 
+                        and passion to every project.
+                    </p>
+                    
+                    <!-- Values -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-secondary"></i>
+                            </div>
+                            <span class="text-primary font-medium">Quality Assured</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-secondary"></i>
+                            </div>
+                            <span class="text-primary font-medium">On-Time Delivery</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-secondary"></i>
+                            </div>
+                            <span class="text-primary font-medium">Sustainable Practices</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-secondary"></i>
+                            </div>
+                            <span class="text-primary font-medium">Expert Team</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Certifications -->
+                    <div class="bg-white rounded-2xl p-6 shadow-lg">
+                        <h4 class="font-semibold text-primary mb-4">Certifications &amp; Memberships</h4>
+                        <div class="flex flex-wrap gap-4">
+                            <span class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">ISO 9001:2015</span>
+                            <span class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">CREDAI Member</span>
+                            <span class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">IGBC Certified</span>
+                            <span class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">RERA Registered</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- STATS -->
+<section class="py-20 px-6 md:px-12 bg-[#0a2540] text-white">
+  <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+    <div class="fade-in">
+      <div class="stat-number">250+</div>
+      <p class="mt-2 text-gray-300 uppercase text-sm tracking-wider">Projects Completed</p>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">19+</div>
+      <p class="mt-2 text-gray-300 uppercase text-sm tracking-wider">Years of Excellence</p>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">180+</div>
+      <p class="mt-2 text-gray-300 uppercase text-sm tracking-wider">Happy Clients</p>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">75+</div>
+      <p class="mt-2 text-gray-300 uppercase text-sm tracking-wider">Expert Professionals</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="py-24 px-6 md:px-12 bg-[#f7f5f0]">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 fade-in">
+      <span class="section-label">What We Offer</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-[#0a2540] mt-3">Our Core Services</h2>
+      <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Comprehensive construction solutions tailored to bring your vision to reality with uncompromising quality.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-home"></i></div>
+        <h3 class="text-xl font-semibold text-[#0a2540] mb-3">Residential</h3>
+        <p class="text-gray-600 text-sm">Luxury villas, apartments, and independent homes designed for modern living.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-building"></i></div>
+        <h3 class="text-xl font-semibold text-[#0a2540] mb-3">Commercial</h3>
+        <p class="text-gray-600 text-sm">Office buildings, retail spaces, and mixed-use developments built to last.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-industry"></i></div>
+        <h3 class="text-xl font-semibold text-[#0a2540] mb-3">Industrial</h3>
+        <p class="text-gray-600 text-sm">Warehouses, factories, and industrial facilities built to global standards.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-drafting-compass"></i></div>
+        <h3 class="text-xl font-semibold text-[#0a2540] mb-3">Renovation</h3>
+        <p class="text-gray-600 text-sm">Transforming existing spaces with modern design and quality materials.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-24 px-6 md:px-12 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 fade-in">
+      <span class="section-label">Our Portfolio</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-[#0a2540] mt-3">Featured Projects</h2>
+      <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Explore our showcase of completed projects across Chennai and Tamil Nadu.</p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="residential">Residential</button>
+      <button class="filter-btn" data-filter="commercial">Commercial</button>
+      <button class="filter-btn" data-filter="industrial">Industrial</button>
+      <button class="filter-btn" data-filter="hospitality">Hospitality</button>
+    </div>
+
+    <div id="projectGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- cards will be injected -->
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT MODAL -->
+<div id="projectModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeModal()"><i class="fas fa-times text-gray-800"></i></div>
+    <img id="modalImg" src="" class="w-full h-80 object-cover" />
+    <div class="p-8">
+      <span id="modalCategory" class="section-label"></span>
+      <h3 id="modalTitle" class="text-3xl font-bold text-[#0a2540] mt-2"></h3>
+      <p id="modalDesc" class="text-gray-600 mt-4 leading-relaxed"></p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t">
+        <div><div class="text-xs text-gray-500 uppercase tracking-wider">Location</div><div id="modalLocation" class="font-semibold text-[#0a2540] mt-1"></div></div>
+        <div><div class="text-xs text-gray-500 uppercase tracking-wider">Area</div><div id="modalArea" class="font-semibold text-[#0a2540] mt-1"></div></div>
+        <div><div class="text-xs text-gray-500 uppercase tracking-wider">Year</div><div id="modalYear" class="font-semibold text-[#0a2540] mt-1"></div></div>
+        <div><div class="text-xs text-gray-500 uppercase tracking-wider">Status</div><div id="modalStatus" class="font-semibold text-[#c9a96e] mt-1"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Team Section -->
+<section id="team" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <p class="text-secondary font-semibold tracking-wider mb-4">OUR LEADERSHIP</p>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-primary mb-6">
+                    Meet Our Team
+                </h2>
+                <p class="text-gray-600 text-lg">
+                    Experienced professionals dedicated to delivering excellence in every project.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="text-center group">
+                    <div class="relative mb-6 rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Harsha Kumar" class="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <div class="flex space-x-4">
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary">Harsha Kumar</h3>
+                    <p class="text-secondary font-medium">Founder &amp; CEO</p>
+                    <p class="text-gray-500 text-sm mt-2">30+ years in construction industry</p>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="text-center group">
+                    <div class="relative mb-6 rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Priya Sharma" class="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <div class="flex space-x-4">
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary">Priya Sharma</h3>
+                    <p class="text-secondary font-medium">Chief Architect</p>
+                    <p class="text-gray-500 text-sm mt-2">Award-winning design expertise</p>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="text-center group">
+                    <div class="relative mb-6 rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Rajesh Menon" class="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <div class="flex space-x-4">
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary">Rajesh Menon</h3>
+                    <p class="text-secondary font-medium">Project Director</p>
+                    <p class="text-gray-500 text-sm mt-2">100+ projects delivered</p>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="text-center group">
+                    <div class="relative mb-6 rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Anitha Rajan" class="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <div class="flex space-x-4">
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" onclick="return false" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-colors">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary">Anitha Rajan</h3>
+                    <p class="text-secondary font-medium">Interior Design Head</p>
+                    <p class="text-gray-500 text-sm mt-2">Luxury interiors specialist</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- TESTIMONIALS -->
+<section class="py-24 px-6 md:px-12 bg-[#f7f5f0]">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 fade-in">
+      <span class="section-label">Client Reviews</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-[#0a2540] mt-3">What Clients Say</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="testimonial-card fade-in">
+        <div class="text-[#c9a96e] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+        <p class="text-gray-600 italic leading-relaxed">Harsha Constructions delivered our dream villa exactly as promised. Their attention to detail and timely execution was remarkable.</p>
+        <div class="mt-6 flex items-center gap-4">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full" alt="">
+          <div>
+            <div class="font-semibold text-[#0a2540]">Rajesh Kumar</div>
+            <div class="text-sm text-gray-500">Villa Owner, ECR</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in">
+        <div class="text-[#c9a96e] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+        <p class="text-gray-600 italic leading-relaxed">Professional, reliable, and innovative. Our corporate office was built to the highest standards. Highly recommended for commercial projects.</p>
+        <div class="mt-6 flex items-center gap-4">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full" alt="">
+          <div>
+            <div class="font-semibold text-[#0a2540]">Priya Venkatesh</div>
+            <div class="text-sm text-gray-500">CEO, TechNova Chennai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in">
+        <div class="text-[#c9a96e] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+        <p class="text-gray-600 italic leading-relaxed">From design consultation to handover, the team was exceptional. Our apartment complex is now a landmark in the neighborhood.</p>
+        <div class="mt-6 flex items-center gap-4">
+          <img src="https://randomuser.me/api/portraits/men/54.jpg" class="w-12 h-12 rounded-full" alt="">
+          <div>
+            <div class="font-semibold text-[#0a2540]">Arun Sundaram</div>
+            <div class="text-sm text-gray-500">Developer, Anna Nagar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 px-6 md:px-12 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 fade-in">
+      <span class="section-label">Get In Touch</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-[#0a2540] mt-3">Let's Build Together</h2>
+      <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Have a project in mind? We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12">
+      <div class="fade-in">
+        <div class="grid sm:grid-cols-2 gap-6 mb-8">
+          <div class="p-6 bg-[#f7f5f0] rounded-sm">
+            <div class="w-12 h-12 bg-[#c9a96e] text-white flex items-center justify-center rounded-sm mb-4"><i class="fas fa-map-marker-alt"></i></div>
+            <h4 class="font-semibold text-[#0a2540]">Visit Us</h4>
+            <p class="text-gray-600 text-sm mt-2">No. 42, Anna Salai, T. Nagar, Chennai, Tamil Nadu 600017, India</p>
+          </div>
+          <div class="p-6 bg-[#f7f5f0] rounded-sm">
+            <div class="w-12 h-12 bg-[#c9a96e] text-white flex items-center justify-center rounded-sm mb-4"><i class="fas fa-phone-alt"></i></div>
+            <h4 class="font-semibold text-[#0a2540]">Call Us</h4>
+            <p class="text-gray-600 text-sm mt-2">+91 98765 43210<br/>+91 44 4567 8910</p>
+          </div>
+          <div class="p-6 bg-[#f7f5f0] rounded-sm">
+            <div class="w-12 h-12 bg-[#c9a96e] text-white flex items-center justify-center rounded-sm mb-4"><i class="fas fa-envelope"></i></div>
+            <h4 class="font-semibold text-[#0a2540]">Email Us</h4>
+            <p class="text-gray-600 text-sm mt-2">info@harshaconstructions.in<br/>projects@harshaconstructions.in</p>
+          </div>
+          <div class="p-6 bg-[#f7f5f0] rounded-sm">
+            <div class="w-12 h-12 bg-[#c9a96e] text-white flex items-center justify-center rounded-sm mb-4"><i class="fas fa-clock"></i></div>
+            <h4 class="font-semibold text-[#0a2540]">Work Hours</h4>
+            <p class="text-gray-600 text-sm mt-2">Mon - Sat: 9AM - 7PM<br/>Sunday: By appointment</p>
+          </div>
+        </div>
+        <div class="rounded-sm overflow-hidden shadow-lg">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15553.21287!2d80.2337!3d13.0418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267b1e0b67b2f%3A0x0!2sT.%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000" width="100%" height="280" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="fade-in bg-[#f7f5f0] p-10 rounded-sm visible" onsubmit="submitForm(event)">
+                    <h3 class="text-2xl font-bold text-primary mb-6">Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Full Name *</label>
+                                <input type="text" name="name" required="" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="Your name">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Email Address *</label>
+                                <input type="email" name="email" required="" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="your@email.com">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Phone Number *</label>
+                            <input type="tel" name="phone" required="" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="+91 98765 43210">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Project Type</label>
+                            <select name="projectType" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all">
+                                <option value="">Select project type</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="industrial">Industrial</option>
+                                <option value="renovation">Renovation</option>
+                                <option value="interior">Interior Design</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Your Message *</label>
+                            <textarea name="message" rows="4" required="" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all resize-none" placeholder="Tell us about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-semibold flex items-center justify-center space-x-2">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+         </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-[#0a2540] text-gray-300 pt-16 pb-6 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-10 h-10 bg-[#c9a96e] flex items-center justify-center rounded-sm">
+          <span class="text-white font-bold text-xl" style="font-family:'Playfair Display',serif;">H</span>
+        </div>
+        <div>
+          <div class="text-white font-bold text-lg" style="font-family:'Playfair Display',serif;">HARSHA</div>
+          <div class="text-[#c9a96e] text-[10px] tracking-[3px]">CONSTRUCTIONS</div>
+        </div>
+      </div>
+      <p class="text-sm leading-relaxed">Building iconic structures across Chennai with a commitment to quality, innovation, and sustainability since 2005.</p>
+      <div class="flex gap-3 mt-5">
+        <a href="#" class="w-10 h-10 border border-gray-600 hover:bg-[#c9a96e] hover:border-[#c9a96e] flex items-center justify-center rounded-sm transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="w-10 h-10 border border-gray-600 hover:bg-[#c9a96e] hover:border-[#c9a96e] flex items-center justify-center rounded-sm transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="w-10 h-10 border border-gray-600 hover:bg-[#c9a96e] hover:border-[#c9a96e] flex items-center justify-center rounded-sm transition"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="w-10 h-10 border border-gray-600 hover:bg-[#c9a96e] hover:border-[#c9a96e] flex items-center justify-center rounded-sm transition"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-lg">Quick Links</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#home" class="hover:text-[#c9a96e] transition">Home</a></li>
+        <li><a href="#about" class="hover:text-[#c9a96e] transition">About Us</a></li>
+        <li><a href="#services" class="hover:text-[#c9a96e] transition">Services</a></li>
+        <li><a href="#projects" class="hover:text-[#c9a96e] transition">Projects</a></li>
+        <li><a href="#contact" class="hover:text-[#c9a96e] transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-lg">Services</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-[#c9a96e] transition">Residential Construction</a></li>
+        <li><a href="#" class="hover:text-[#c9a96e] transition">Commercial Projects</a></li>
+        <li><a href="#" class="hover:text-[#c9a96e] transition">Industrial Builds</a></li>
+        <li><a href="#" class="hover:text-[#c9a96e] transition">Renovation & Interiors</a></li>
+        <li><a href="#" class="hover:text-[#c9a96e] transition">Turnkey Solutions</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-white font-semibold mb-4 text-lg">Contact Info</h4>
+      <ul class="space-y-3 text-sm">
+        <li class="flex gap-3"><i class="fas fa-map-marker-alt text-[#c9a96e] mt-1"></i><span>No. 42, Anna Salai, T. Nagar, Chennai 600017</span></li>
+        <li class="flex gap-3"><i class="fas fa-phone-alt text-[#c9a96e] mt-1"></i><span>+91 98765 43210</span></li>
+        <li class="flex gap-3"><i class="fas fa-envelope text-[#c9a96e] mt-1"></i><span>info@harshaconstructions.in</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto border-t border-gray-700 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+    <p>&copy; 2026 Harsha Constructions. All Rights Reserved developed by Zannatul.</p>
+    <div class="flex gap-6 mt-3 md:mt-0">
+      <a href="#" class="hover:text-[#c9a96e] transition">Privacy Policy</a>
+      <a href="#" class="hover:text-[#c9a96e] transition">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) navbar.classList.add('nav-scrolled');
+    else navbar.classList.remove('nav-scrolled');
+  });
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> mobileMenu.classList.remove('active')));
+
+  // Projects data
+  const projects = [
+    { title: "Serene Heights Villa", category: "residential", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", location:"ECR, Chennai", area:"6,500 sq.ft", year:"2023", status:"Completed", desc:"A luxurious beachfront villa featuring contemporary design, smart home integration, and sustainable materials. Every detail crafted for elegant living." },
+    { title: "TechNova Corporate Tower", category: "commercial", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80", location:"OMR, Chennai", area:"1,20,000 sq.ft", year:"2023", status:"Completed", desc:"A Grade-A commercial tower with LEED Gold certification, modern workspaces, and state-of-the-art infrastructure." },
+    { title: "Coastal Breeze Apartments", category: "residential", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80", location:"Besant Nagar, Chennai", area:"85,000 sq.ft", year:"2022", status:"Completed", desc:"Premium residential apartments with 42 units, offering panoramic sea views, clubhouse, pool, and landscaped gardens." },
+    { title: "Prestige Logistics Hub", category: "industrial", img: "https://www.kembhaviarchitects.com/wp-content/uploads/2016/12/mrph3-copy-1100x617.jpg?w=800&q=80", location:"Sriperumbudur", area:"2,50,000 sq.ft", year:"2024", status:"Ongoing", desc:"A state-of-the-art logistics and warehousing facility with automated systems and sustainable design." },
+    { title: "Heritage Grand Hotel", category: "hospitality", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80", location:"Mahabalipuram", area:"95,000 sq.ft", year:"2023", status:"Completed", desc:"A 5-star heritage-themed hotel with 120 rooms, spa, restaurants, and banquet facilities blending tradition with luxury." },
+    { title: "Skyline Business Park", category: "commercial", img: "https://images.unsplash.com/photo-1464146072230-91cabc968266?w=800&q=80", location:"Guindy, Chennai", area:"3,00,000 sq.ft", year:"2024", status:"Ongoing", desc:"A mixed-use business park featuring office spaces, retail podium, and F&B zones with smart building technology." },
+    { title: "Marina Residences", category: "residential", img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80", location:"Adyar, Chennai", area:"1,10,000 sq.ft", year:"2022", status:"Completed", desc:"Luxury gated community with premium amenities, 3 & 4 BHK residences, and lush green landscaping." },
+    { title: "Chennai Auto Components Facility", category: "industrial", img: "https://lh6.googleusercontent.com/proxy/EWzq0v8GG4shL51bE9Jes0LV6mpFGXDA0Jk7ovutW_36awxLrZ4Tp-hyDWF0X4zE2JOBflq6yydlyyhbMTNEJOkMdDjpy82X0ckQEApCYdUdSe_eGxquwosKfJF4zg?w=800&q=80", location:"Oragadam", area:"1,80,000 sq.ft", year:"2022", status:"Completed", desc:"Modern manufacturing facility with PEB structures, office blocks, and utility infrastructure." },
+    { title: "Azure Boutique Resort", category: "hospitality", img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", location:"ECR, Chennai", area:"65,000 sq.ft", year:"2024", status:"Ongoing", desc:"An intimate boutique resort with 40 villas, infinity pool, and wellness spa designed for coastal tranquility." }
+  ];
+
+  const grid = document.getElementById('projectGrid');
+  function renderProjects(filter='all'){
+    grid.innerHTML = '';
+    const filtered = filter==='all' ? projects : projects.filter(p=>p.category===filter);
+    filtered.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'project-card fade-in visible';
+      card.innerHTML = `
+        <img src="${p.img}" class="w-full h-80 object-cover" alt="${p.title}">
+        <div class="project-overlay">
+          <div class="text-white">
+            <span class="text-[#c9a96e] uppercase text-xs tracking-widest font-semibold">${p.category}</span>
+            <h3 class="text-2xl font-bold mt-2" style="font-family:'Playfair Display',serif;">${p.title}</h3>
+            <p class="text-sm text-gray-200 mt-2"><i class="fas fa-map-marker-alt mr-2"></i>${p.location}</p>
+            <button class="mt-4 text-sm text-[#c9a96e] font-semibold hover:underline">View Details <i class="fas fa-arrow-right ml-1"></i></button>
+          </div>
+        </div>`;
+      card.addEventListener('click', () => openModal(p));
+      grid.appendChild(card);
+    });
+  }
+  renderProjects();
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProjects(btn.dataset.filter);
+    });
+  });
+
+  // Modal
+  function openModal(p){
+    document.getElementById('modalImg').src = p.img;
+    document.getElementById('modalCategory').textContent = p.category;
+    document.getElementById('modalTitle').textContent = p.title;
+    document.getElementById('modalDesc').textContent = p.desc;
+    document.getElementById('modalLocation').textContent = p.location;
+    document.getElementById('modalArea').textContent = p.area;
+    document.getElementById('modalYear').textContent = p.year;
+    document.getElementById('modalStatus').textContent = p.status;
+    document.getElementById('projectModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    document.getElementById('projectModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('projectModal').addEventListener('click', e=>{
+    if(e.target.id==='projectModal') closeModal();
+  });
+
+  // Form
+  function submitForm(e){
+    e.preventDefault();
+    alert('Thank you for reaching out! We will contact you within 24 hours.');
+    e.target.reset();
+  }
+
+  // Fade In on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+</script>
+</body>
+</html>
